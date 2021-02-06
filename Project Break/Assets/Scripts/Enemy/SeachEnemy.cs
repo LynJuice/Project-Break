@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class SeachEnemy : MonoBehaviour
 {
     [SerializeField] Transform[] ExtrasspawnPos;
-    [SerializeField] SeachEnemy Spawn;
+    [SerializeField] AttackPlayerEnemy[] Spawn;
     [SerializeField] NavMeshAgent NMA;
     [SerializeField] Transform[] points;
     int Health = 100;
@@ -55,7 +55,7 @@ public class SeachEnemy : MonoBehaviour
     {
         for (int i = 0; i < Many; i++)
         {
-            Instantiate(Spawn,ExtrasspawnPos[i]);
+            Instantiate(Spawn[Random.Range(0, Spawn.Length)], ExtrasspawnPos[i].position, Quaternion.identity);
         }
     }
 }

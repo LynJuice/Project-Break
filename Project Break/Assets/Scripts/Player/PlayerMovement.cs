@@ -34,7 +34,8 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
-        FindClosestEnemy();
+         if(AllEnemys != null)
+            FindClosestEnemy();
         if (ClosestEnemy < 3)
         { 
             EnemysInRange = true;
@@ -75,16 +76,9 @@ public class PlayerMovement : MonoBehaviour
             CurrentMovementSpeed = WalkingSpeed;
         }
     }
-    public void RecieveDamage(int damage)
+    public void RecieveDamage(float damage)
     {
-        if (Defense <= Random.Range(0, 100))
-        {
-            Health -= damage;
-        }
-        else 
-        {
-            Debug.Log("Blocked");
-        }
+        Health -= damage;
     }
     public bool IsDead()
     {
@@ -100,6 +94,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void AttackInRange()
     {
+        if(AllEnemys != null)
         AttackButton.SetActive(true);
 
         if (Input.GetKeyDown(KeyCode.G))
@@ -113,18 +108,13 @@ public class PlayerMovement : MonoBehaviour
         SeachEnemy Closet = null;
         for (int i = 0; i < AllEnemys.Length; i++)
         {
-            if (Vector3.Distance(transform.position, AllEnemys[i].transform.position) <= DistanceBetweenEnemys)
-            {
-                Closet = AllEnemys[i];
-                DistanceBetweenEnemys = Vector3.Distance(transform.position, AllEnemys[i].transform.position);
-            }
+            if(AllEnemys[i] != null)
+                if (Vector3.Distance(transform.position, AllEnemys[i].transform.position) <= DistanceBetweenEnemys)
+                {
+                    Closet = AllEnemys[i];
+                    DistanceBetweenEnemys = Vector3.Distance(transform.position, AllEnemys[i].transform.position);
+                }
         }
-
-        if (Closet == null)
-        {
-            Debug.Log("Failed to get closest Enemy?");
-        }
-
         return Closet;
     }
     void JumpOnEnemy(SeachEnemy Enemy)
@@ -135,6 +125,6 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         Debug.Log("Jumping on " + Enemy.name);
-        Enemy.SummonReinforcements(Random.Range(0,15));
+        Enemy.SummonReinforcements(Random.Range(15,25));
     }
 }
