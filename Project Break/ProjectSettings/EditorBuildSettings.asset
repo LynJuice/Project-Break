@@ -8,10 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/Tokyo.unity
-    guid: 57084403dbe11844bb231842635a74b2
-  - enabled: 1
-    path: Assets/Scenes/Battle Scene.unity
-    guid: 4c95914348d8c204c90bfefc46cb0c91
+    path: Assets/Scenes/Tokyo Shibuya.unity
+    guid: 5bd07122c5cae144ab54ed6f932963f2
   m_configObjects: {}
