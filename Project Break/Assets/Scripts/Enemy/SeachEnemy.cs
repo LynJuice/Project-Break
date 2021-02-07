@@ -3,28 +3,14 @@ using UnityEngine;
 using UnityEngine.AI;
 public class SeachEnemy : MonoBehaviour
 {
+    [SerializeField] PlayerMovement PM;
     [SerializeField] Transform[] ExtrasspawnPos;
     [SerializeField] AttackPlayerEnemy[] Spawn;
     [SerializeField] NavMeshAgent NMA;
     [SerializeField] Transform[] points;
-    int Health = 100;
     int destPoint = 0;
     [SerializeField] float TimeToWait;
     bool Reached;
-    public void GetDamage(int Damage)
-    {
-        Health -= Damage;
-    }
-
-    public bool IsDead()
-    {
-        if (Health <= 0)
-            return true;
-
-        Debug.LogError("Couldn't Determine Death");
-        return false;
-    }
-
     void Start()
     {
         if (!NMA.pathPending && NMA.remainingDistance < 0.5f)
@@ -51,11 +37,17 @@ public class SeachEnemy : MonoBehaviour
         }
     }
     
-    public void SummonReinforcements(int Many)
+    public void SummonReinforcements(int Many,bool Advantige)
     {
         for (int i = 0; i < Many; i++)
         {
-            Instantiate(Spawn[Random.Range(0, Spawn.Length)], ExtrasspawnPos[i].position, Quaternion.identity);
+            if (i < ExtrasspawnPos.Length)
+            {
+                AttackPlayerEnemy APE = Instantiate(Spawn[Random.Range(0, Spawn.Length)], ExtrasspawnPos[i].position, Quaternion.identity);
+                APE.PlayerAdvantage = Advantige;
+            }
+            else Debug.LogWarning("More Spawnning Places Needed");
         }
+        Destroy(gameObject);
     }
 }

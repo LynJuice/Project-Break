@@ -3,9 +3,12 @@
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("States")]
+    bool Hidden;
+    bool Fighting;
+
     [Header("Enemys")]
     bool EnemysInRange;
-    [SerializeField] LayerMask EnemyLayer;
     float ClosestEnemy;
     [SerializeField] SeachEnemy[] AllEnemys = null;
 
@@ -14,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float Defense;
 
     [Header("Speeds")]
-    [SerializeField] float CurrentMovementSpeed = 6;
+    [SerializeField] float CurrentMovementSpeed = 0;
     [SerializeField] float RunningSpeed = 12;
     [SerializeField] float WalkingSpeed = 6;
 
@@ -32,11 +35,21 @@ public class PlayerMovement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
+
+    public void SetPlayerState(bool fight)
+    {
+        Fighting = fight;
+        Hidden = !fight;
+    }
+
     void Update()
     {
-         if(AllEnemys != null)
-            FindClosestEnemy();
-        if (ClosestEnemy < 3)
+        if (FindObjectsOfType<AttackPlayerEnemy>().Length == 0)
+            SetPlayerState(false);
+
+
+        FindClosestEnemy();
+        if (ClosestEnemy < 10)
         { 
             EnemysInRange = true;
         } 
@@ -115,6 +128,7 @@ public class PlayerMovement : MonoBehaviour
                     DistanceBetweenEnemys = Vector3.Distance(transform.position, AllEnemys[i].transform.position);
                 }
         }
+        ClosestEnemy = DistanceBetweenEnemys;
         return Closet;
     }
     void JumpOnEnemy(SeachEnemy Enemy)
@@ -125,6 +139,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         Debug.Log("Jumping on " + Enemy.name);
-        Enemy.SummonReinforcements(Random.Range(15,25));
+        Enemy.SummonReinforcements(Random.Range(15,25),true);
+        SetPlayerState(true);
     }
 }
