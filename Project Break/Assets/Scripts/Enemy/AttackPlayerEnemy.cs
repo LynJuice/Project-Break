@@ -8,6 +8,8 @@ public class AttackPlayerEnemy : MonoBehaviour
     [SerializeField] Transform player;
     [SerializeField] NavMeshAgent Enemy;
     public bool PlayerAdvantage;
+    public int health;
+
     float DistanceFromPlayer()
     {
         return Vector3.Distance(transform.position, FindObjectOfType<PlayerMovement>().transform.position);
@@ -16,16 +18,17 @@ public class AttackPlayerEnemy : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<PlayerMovement>().transform;
-        if (PlayerAdvantage)
-        { 
-            
-        }
-
         transform.LookAt(player);
     }
     private void Update()
     {
         StartCoroutine(CatchPlayer());
+
+        if (health <= 0)
+        {
+            player.GetComponent<PlayerMovement>().OnKill();
+            Destroy(gameObject);
+        }
     }
 
     IEnumerator CatchPlayer()

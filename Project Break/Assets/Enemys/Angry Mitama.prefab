@@ -118,3 +118,4 @@ MonoBehaviour:
   player: {fileID: 0}
   Enemy: {fileID: 8379583871922932955}
   PlayerAdvantage: 0
+  health: 100

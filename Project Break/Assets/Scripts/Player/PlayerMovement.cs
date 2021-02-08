@@ -3,9 +3,16 @@
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Debug Mode")]
+    bool ShowAttackSize;
+    [SerializeField] GameObject DemonAttackShow;
+
+    [Header("Demons")]
+    [SerializeField] ScriptableDemon CurrentDemon;
+
     [Header("States")]
-    bool Hidden;
-    bool Fighting;
+    public bool Hidden;
+    public bool Fighting;
 
     [Header("Enemys")]
     bool EnemysInRange;
@@ -31,19 +38,23 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject AttackButton;
     void Start()
     {
+        if(ShowAttackSize)
+            DemonAttackShow.transform.localScale = new Vector3(GetComponent<UseDemon>().Reach, GetComponent<UseDemon>().Reach, GetComponent<UseDemon>().Reach);
+
         Controller = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-
     public void SetPlayerState(bool fight)
     {
-        Fighting = fight;
-        Hidden = !fight;
+        Fighting = !fight;
+        Hidden = fight;
     }
-
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.T) && !Fighting)
+            GetComponent<UseDemon>().Strike(CurrentDemon);
+
         if (FindObjectsOfType<AttackPlayerEnemy>().Length == 0)
             SetPlayerState(false);
 
@@ -141,5 +152,14 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Jumping on " + Enemy.name);
         Enemy.SummonReinforcements(Random.Range(15,25),true);
         SetPlayerState(true);
+    }
+    void CheckEnemys()
+    {
+        if (FindObjectsOfType<AttackPlayerEnemy>().Length == 0)
+            SetPlayerState(false);
+    }
+    public void OnKill()
+    {
+        CheckEnemys();
     }
 }
