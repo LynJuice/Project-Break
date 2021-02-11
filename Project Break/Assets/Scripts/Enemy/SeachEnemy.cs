@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 public class SeachEnemy : MonoBehaviour
 {
+    public GameObject ToBeAttackedShow;
     [SerializeField] PlayerMovement PM;
     [SerializeField] Transform[] ExtrasspawnPos;
     [SerializeField] AttackPlayerEnemy[] Spawn;
@@ -13,6 +14,7 @@ public class SeachEnemy : MonoBehaviour
     bool Reached;
     void Start()
     {
+
         if (!NMA.pathPending && NMA.remainingDistance < 0.5f)
             StartCoroutine(GotoNextPoint());
     }
@@ -30,6 +32,11 @@ public class SeachEnemy : MonoBehaviour
 
     void Update()
     {
+        if (Vector3.Distance(PM.transform.position, transform.position) < 10)
+            ToBeAttackedShow.SetActive(true);
+        else
+            ToBeAttackedShow.SetActive(false);
+
         if (!NMA.pathPending && NMA.remainingDistance < 0.5f && Reached)
         {
             Reached = false;

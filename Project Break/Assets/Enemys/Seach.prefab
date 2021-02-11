@@ -226,7 +226,7 @@ GameObject:
   - component: {fileID: 3886580006774024869}
   m_Layer: 9
   m_Name: Seach
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -344,6 +344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1889e729519a5b4fb7dbc70a31cd434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ToBeAttackedShow: {fileID: 0}
   PM: {fileID: 0}
   ExtrasspawnPos: []
   Spawn:

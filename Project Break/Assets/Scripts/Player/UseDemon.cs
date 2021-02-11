@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class UseDemon : MonoBehaviour
 {
+    [SerializeField] Transform SummoningDemonSpot;
     public int Reach;
     [SerializeField] int RequeredCharge = 75;
     public void Strike(ScriptableDemon SD)
@@ -14,12 +16,14 @@ public class UseDemon : MonoBehaviour
             if (FindAllCloseEnemys(Reach, ape).Length == 0)
                 Debug.LogError("Failed To find Close Enemy");
 
+            StartCoroutine(SummonDemon(SD.Model, SummoningDemonSpot, 1.5f));
+
             for (int i = 0; i < FindAllCloseEnemys(Reach, ape).Length; i++)
             {
                 FindAllCloseEnemys(Reach, ape)[i].health -= Random.Range(50, 75);
             }
 
-            SD.Charge -= RequeredCharge;
+            SD.Charge -= RequeredCharge; 
         }
         else 
         {
@@ -43,4 +47,12 @@ public class UseDemon : MonoBehaviour
 
         return CloseEnemys.ToArray();
     } // Finds All Near By Enemys
+
+    IEnumerator SummonDemon(GameObject Demon,Transform Where,float Stay)
+    {
+        GameObject SummonedDemon = Instantiate(Demon,Where);
+
+        yield return new WaitForSeconds(Stay);
+        Destroy(SummonedDemon);
+    }
 }

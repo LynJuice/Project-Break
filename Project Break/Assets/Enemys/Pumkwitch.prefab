@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 1814944505509587766}
   m_Layer: 0
   m_Name: Pumkwitch
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -228,6 +228,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84ebacb908fb46743bb53a65c72218a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Drops:
+  - {fileID: 11400000, guid: ec71d849d7e229242a3a1588ffa3ab67, type: 2}
+  - {fileID: 11400000, guid: 87960debafc8dc84f8206dd34b222dba, type: 2}
+  DemonPlayerForm: {fileID: 11400000, guid: e15f989eb7a4d774daa7bfe5b578c5dc, type: 2}
   player: {fileID: 0}
   Enemy: {fileID: 2133088280465177794}
   PlayerAdvantage: 0

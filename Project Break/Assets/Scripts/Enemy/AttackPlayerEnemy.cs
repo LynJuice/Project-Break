@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class AttackPlayerEnemy : MonoBehaviour
 {
+    [SerializeField] ScriptableItems[] Drops;
+    [SerializeField] ScriptableDemon DemonPlayerForm;
     [SerializeField] Transform player;
     [SerializeField] NavMeshAgent Enemy;
     public bool PlayerAdvantage;
@@ -27,6 +29,12 @@ public class AttackPlayerEnemy : MonoBehaviour
         if (health <= 0)
         {
             player.GetComponent<PlayerMovement>().OnKill();
+            if (Random.Range(0, 100) > 95)
+                player.GetComponent<Inventory>().AddNewDemon(DemonPlayerForm);
+
+            if (Random.Range(0, 100) > 95)
+                player.GetComponent<Inventory>().AddNewItem(Drops[Random.Range(1, Drops.Length)], Random.Range(1, 5));
+
             Destroy(gameObject);
         }
     }

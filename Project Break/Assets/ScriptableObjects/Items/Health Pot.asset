@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76b8c6c6d5492684e9e98c005cf9338d, type: 3}
-  m_Name: Testing Demon
+  m_Script: {fileID: 11500000, guid: 019f086dbee496e4f8c597af00a7de74, type: 3}
+  m_Name: Health Pot
   m_EditorClassIdentifier: 
-  Model: {fileID: 3926901797543743744, guid: 74f18d3e431f0b7449439779122cd8ed, type: 3}
-  Charge: 4524
+  Name: Health Pot
+  HealBy: 25
+  ChargeBy: 0
