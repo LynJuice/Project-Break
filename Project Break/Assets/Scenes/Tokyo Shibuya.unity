@@ -1846,11 +1846,11 @@ MonoBehaviour:
   InfHelth: 0
   InfCharge: 0
   InfDefence: 0
+  InfBullets: 0
   DemonAttackShow: {fileID: 1487326473}
-  Blade: {fileID: 2145170579335296529, guid: 1771e3cfbf1ac2e44a45e345914136c0, type: 3}
-  SpawnAt: {fileID: 901235922}
-  MelleDamageMin: 100
-  MelleDamageMax: 125
+  MaxDamage: 75
+  MinDamage: 50
+  BulletsLeft: 100
   CurrentDemon: {fileID: 11400000, guid: ecddf21748fad5c4d83c54e97fea172c, type: 2}
   inv: {fileID: 1396002047}
   Hidden: 1
@@ -2100,27 +2100,27 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 39dad640d7cf5f74d8c7034b81e8cda8,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9063868
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 39dad640d7cf5f74d8c7034b81e8cda8,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0.42244866
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 39dad640d7cf5f74d8c7034b81e8cda8,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 39dad640d7cf5f74d8c7034b81e8cda8,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 39dad640d7cf5f74d8c7034b81e8cda8,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -49.979004
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 39dad640d7cf5f74d8c7034b81e8cda8,
         type: 3}
@@ -3571,7 +3571,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2646713896796847850}
-  m_LocalRotation: {x: 0.14377807, y: -0.014374953, z: 0.0020887272, w: 0.9895034}
+  m_LocalRotation: {x: 0.14377809, y: -0.014374941, z: 0.0020887258, w: 0.9895034}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

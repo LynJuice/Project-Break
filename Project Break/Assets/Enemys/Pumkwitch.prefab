@@ -170,6 +170,7 @@ GameObject:
   - component: {fileID: 2611064619427797539}
   - component: {fileID: 2133088280465177794}
   - component: {fileID: 1814944505509587766}
+  - component: {fileID: 5532249049812758053}
   m_Layer: 0
   m_Name: Pumkwitch
   m_TagString: Enemy
@@ -236,6 +237,19 @@ MonoBehaviour:
   Enemy: {fileID: 2133088280465177794}
   PlayerAdvantage: 0
   health: 100
+--- !u!65 &5532249049812758053
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3420358312483733657}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.06437135}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4352879965300833892
 GameObject:
   m_ObjectHideFlags: 0

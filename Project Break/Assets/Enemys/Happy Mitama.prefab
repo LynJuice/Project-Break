@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1004430543222633555}
   - component: {fileID: 495676237969173895}
   - component: {fileID: 2479984308499742142}
+  - component: {fileID: 9154823443660051627}
   m_Layer: 0
   m_Name: Happy Mitama
   m_TagString: Enemy
@@ -123,3 +124,16 @@ MonoBehaviour:
   Enemy: {fileID: 495676237969173895}
   PlayerAdvantage: 0
   health: 100
+--- !u!65 &9154823443660051627
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116111609068178419}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.06437135}
+  m_Center: {x: -0.540823, y: 0, z: 0}

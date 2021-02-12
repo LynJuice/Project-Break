@@ -9,14 +9,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] bool InfHelth;
     [SerializeField] bool InfCharge;
     [SerializeField] bool InfDefence;
+    [SerializeField] bool InfBullets;
     [SerializeField] GameObject DemonAttackShow;
 
-    [Header("Melle")]
-    [SerializeField] UseKatana Blade;
-    [SerializeField] Transform SpawnAt;
-    [SerializeField] int MelleDamageMin;
-    [SerializeField] int MelleDamageMax;
-    List<AttackPlayerEnemy> EnemysInMelleRange;
+    [Header("Guns")]
+    [SerializeField] float MaxDamage;
+    [SerializeField] float MinDamage;
+    [SerializeField] int BulletsLeft;
 
     [Header("Demons")]
     public ScriptableDemon CurrentDemon;
@@ -78,6 +77,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (InfDefence)
             Defense = Mathf.Infinity;
+
+        if (InfBullets)
+            BulletsLeft = Mathf.RoundToInt(Mathf.Infinity);
 
     }                        // Debug mode Duh!
     void InputsAndOther()
@@ -148,12 +150,10 @@ public class PlayerMovement : MonoBehaviour
                 Health = 100;
         } // Health Pots
 
-        if (Input.GetMouseButtonDown(0))
-        { 
-            StrikeEnemysInMelleRange();
-        } // Strike All Melle Enemys
-            
-
+        if (BulletsLeft > 0 && Input.GetMouseButtonDown(0))
+        {
+            Shoot();
+        } // Gun
     }                   // Gets All Inputs 
     void Movement()
     {
@@ -279,22 +279,36 @@ public class PlayerMovement : MonoBehaviour
         Health += AddHealthBy;
         Debug.Log("Player Used Health Pot, Healed By " + AddHealthBy);
     }      // Allows Player To Use Health Pots
-    void OnTriggerEnter(Collider other)
+    GameObject FindCloseTagedEnemy()
     {
-        if (other.tag == "Enemy")
-            EnemysInMelleRange.Add(other.GetComponent<AttackPlayerEnemy>());
-    }     // Trigger For Enemys In Melle Range
-    void OnTriggerExit(Collider other)
-    {
-        if(other.tag == "Enemy")
-            EnemysInMelleRange.Remove(other.GetComponent<AttackPlayerEnemy>());
-    }      // Trigger For Enemys Not InMelleRange
-    void StrikeEnemysInMelleRange()
-    {
-        for (int i = 0; i < EnemysInMelleRange.Count; i++)
+        GameObject[] gos;
+        gos = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject closest = null;
+        float distance = Mathf.Infinity;
+        Vector3 position = transform.position;
+        foreach (GameObject go in gos)
         {
-            EnemysInMelleRange[i].health -= Random.Range(MelleDamageMin,MelleDamageMax);
+            Vector3 diff = go.transform.position - position;
+            float curDistance = diff.sqrMagnitude;
+            if (curDistance < distance)
+            {
+                closest = go;
+                distance = curDistance;
+            }
         }
-        Debug.Log("Player hit total of: " + EnemysInMelleRange.Count + "Enemys");
-    }         // Strikes All Enemys Near By
+        return closest;
+    }        // Finds Closest object with tag Enemy
+    void Shoot()
+    {
+        AttackPlayerEnemy Enemy;
+        if (FindCloseTagedEnemy() != null)
+            Enemy = FindCloseTagedEnemy().GetComponent<AttackPlayerEnemy>();
+        else
+            return;
+
+        Vector3 targetPostition = new Vector3(Enemy.transform.position.x, transform.position.y, Enemy.transform.position.z);
+        transform.LookAt(targetPostition);
+        Enemy.health -= Mathf.RoundToInt(Random.Range(MinDamage,MaxDamage));
+        BulletsLeft--;
+    }                            // Shoots Bullets
 }
