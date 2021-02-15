@@ -1,27 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+    [HideInInspector] public bool Changing;
     public List<ScriptableItems> Items;
     public List<ScriptableDemon> Demons;
     [SerializeField] int CurrentlySelectedDemon;
+    public PlayerMovement Player;
 
-    [SerializeField] PlayerMovement Player;
+    [Header("Animaton")]
+    [SerializeField] Animator Anim;
+    [SerializeField] Image DemonIcon;
 
     void Start()
     {
+        DemonIcon.sprite = Player.CurrentDemon.Icon;
         AddNewDemon(Player.CurrentDemon);
     }
 
     public void ChangeDemon(bool Next)
     {
+        if (Changing == true)
+            return;
+
         if (Demons.Count == 0)
         {
             Debug.LogError("Player Has No Demons // Add Starting Demon");
             return;
         }
+
+        if (Demons.Count == 1)
+            return;
+
+        Changing = true;
 
         if (Next)
         {
@@ -49,6 +63,8 @@ public class Inventory : MonoBehaviour
                 Player.CurrentDemon = Demons[CurrentlySelectedDemon];
             }
         }
+
+        StartCoroutine(ChangeDemonIcon());
     }
     public void AddNewItem(ScriptableItems Item,int NumberOfItems)
     {
@@ -71,5 +87,14 @@ public class Inventory : MonoBehaviour
 
         Debug.Log("Player Got: " + Demon.name);
         Demons.Add(Demon);
+    }
+
+    IEnumerator ChangeDemonIcon()
+    {
+        Anim.SetTrigger("Change Icon");
+        yield return new WaitForSeconds(0.2f);
+        DemonIcon.sprite = Player.CurrentDemon.Icon;
+        yield return new WaitForSeconds(0.2f);
+        Changing = false;
     }
 }

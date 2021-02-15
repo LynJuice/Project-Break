@@ -1869,7 +1869,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6778936294157079068}
-  m_LocalRotation: {x: 0.16170543, y: -0.01433472, z: 0.0023491704, w: 0.9867322}
+  m_LocalRotation: {x: 0.16170543, y: -0.014334671, z: 0.0023491625, w: 0.9867322}
   m_LocalPosition: {x: -12.749352, y: 3, z: -13.436649}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -2492,7 +2492,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6778936295157062741}
-  m_LocalRotation: {x: 0.14377809, y: -0.014374941, z: 0.0020887258, w: 0.9895034}
+  m_LocalRotation: {x: 0.14377807, y: -0.014374953, z: 0.0020887272, w: 0.9895034}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2566,7 +2566,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6778936295528654317}
-  m_LocalRotation: {x: 0.16170543, y: -0.014334714, z: 0.0023491692, w: 0.9867322}
+  m_LocalRotation: {x: 0.16170543, y: -0.014334676, z: 0.002349163, w: 0.9867322}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3174,10 +3174,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afddbf91c6916794fa5665f3d0059a99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Changing: 0
   Items: []
   Demons: []
   CurrentlySelectedDemon: 0
   Player: {fileID: 8838484558132932162}
+  Anim: {fileID: 0}
+  DemonIcon: {fileID: 0}
 --- !u!1 &8622163270647239578
 GameObject:
   m_ObjectHideFlags: 0

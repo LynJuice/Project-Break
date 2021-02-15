@@ -29,7 +29,7 @@ public class AttackPlayerEnemy : MonoBehaviour
         if (health <= 0)
         {
             player.GetComponent<PlayerMovement>().OnKill();
-            if (Random.Range(0, 100) > 95)
+            if (Random.Range(0, 100) > 0)
                 player.GetComponent<Inventory>().AddNewDemon(DemonPlayerForm);
 
             if (Random.Range(0, 100) > 95)

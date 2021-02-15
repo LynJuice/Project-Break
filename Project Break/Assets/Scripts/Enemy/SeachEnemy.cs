@@ -55,6 +55,7 @@ public class SeachEnemy : MonoBehaviour
             }
             else Debug.LogWarning("More Spawnning Places Needed");
         }
+        PM.SetPlayerState(true);
         Destroy(gameObject);
     }
 }

@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Pum Witch
   m_EditorClassIdentifier: 
   Name: Pum Witch
+  Icon: {fileID: 21300000, guid: fcdca6c28f320084582015e952ec70b9, type: 3}
   Model: {fileID: 3926901797543743744, guid: 74f18d3e431f0b7449439779122cd8ed, type: 3}
-  Charge: 1000
+  Charge: 550

@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Angry Mitama
   m_EditorClassIdentifier: 
   Name: Angry Mitama
+  Icon: {fileID: 21300000, guid: 707462b539aedc043b10beb0dc3fa971, type: 3}
   Model: {fileID: 2599685243379137643, guid: 238f911d499238b458379899d512a554, type: 3}
-  Charge: 9999
+  Charge: 9549

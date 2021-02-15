@@ -86,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.T) && !Fighting)
             GetComponent<UseDemon>().Strike(CurrentDemon);
-
+        
         if (FindObjectsOfType<AttackPlayerEnemy>().Length == 0)
             SetPlayerState(false);
 

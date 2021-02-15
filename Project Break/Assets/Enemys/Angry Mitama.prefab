@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2438924054503587446}
   - component: {fileID: 8379583871922932955}
   - component: {fileID: 3401798006438413871}
-  - component: {fileID: 3754862743034785732}
   m_Layer: 0
   m_Name: Angry Mitama
   m_TagString: Enemy
@@ -124,16 +123,3 @@ MonoBehaviour:
   Enemy: {fileID: 8379583871922932955}
   PlayerAdvantage: 0
   health: 100
---- !u!65 &3754862743034785732
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4240192862298890147}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 0.06437135}
-  m_Center: {x: -0.540823, y: 0, z: 0}
