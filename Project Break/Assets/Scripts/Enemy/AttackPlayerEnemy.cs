@@ -11,6 +11,7 @@ public class AttackPlayerEnemy : MonoBehaviour
     [SerializeField] NavMeshAgent Enemy;
     public bool PlayerAdvantage;
     public int health;
+    public int Chance = 95;
 
     float DistanceFromPlayer()
     {
@@ -29,10 +30,10 @@ public class AttackPlayerEnemy : MonoBehaviour
         if (health <= 0)
         {
             player.GetComponent<PlayerMovement>().OnKill();
-            if (Random.Range(0, 100) > 0)
+            if (Random.Range(0, 100) > Chance)
                 player.GetComponent<Inventory>().AddNewDemon(DemonPlayerForm);
 
-            if (Random.Range(0, 100) > 95)
+            if (Random.Range(0, 100) > Chance)
                 player.GetComponent<Inventory>().AddNewItem(Drops[Random.Range(1, Drops.Length)], Random.Range(1, 5));
 
             Destroy(gameObject);

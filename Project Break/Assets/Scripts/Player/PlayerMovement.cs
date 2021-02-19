@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] bool InfCharge;
     [SerializeField] bool InfDefence;
     [SerializeField] bool InfBullets;
+    [SerializeField] bool InfChance;
     [SerializeField] GameObject DemonAttackShow;
 
     [Header("Guns")]
@@ -80,6 +81,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (InfBullets)
             BulletsLeft = Mathf.RoundToInt(Mathf.Infinity);
+
+        if(InfChance)
+            for (int i = 0; i < FindObjectsOfType<AttackPlayerEnemy>().Length; i++)
+            {
+                FindObjectsOfType<AttackPlayerEnemy>()[i].Chance = 0;
+            }
 
     }                        // Debug mode Duh!
     void InputsAndOther()
