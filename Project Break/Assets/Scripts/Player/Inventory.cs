@@ -15,6 +15,9 @@ public class Inventory : MonoBehaviour
     [SerializeField] Animator Anim;
     [SerializeField] Image DemonIcon;
 
+    [Header("Cash")]
+    public int Cash;
+
     void Start()
     {
         DemonIcon.sprite = Player.CurrentDemon.Icon;

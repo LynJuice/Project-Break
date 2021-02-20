@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] bool InfDefence;
     [SerializeField] bool InfBullets;
     [SerializeField] bool InfChance;
+    [SerializeField] bool InfCash;
     [SerializeField] GameObject DemonAttackShow;
 
     [Header("Guns")]
@@ -80,13 +81,16 @@ public class PlayerMovement : MonoBehaviour
             Defense = Mathf.Infinity;
 
         if (InfBullets)
-            BulletsLeft = Mathf.RoundToInt(Mathf.Infinity);
+            BulletsLeft = int.MaxValue;
 
         if(InfChance)
             for (int i = 0; i < FindObjectsOfType<AttackPlayerEnemy>().Length; i++)
             {
                 FindObjectsOfType<AttackPlayerEnemy>()[i].Chance = 0;
             }
+
+        if (InfCash)
+            inv.Cash = int.MaxValue;
 
     }                        // Debug mode Duh!
     void InputsAndOther()
