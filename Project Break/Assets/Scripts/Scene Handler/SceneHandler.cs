@@ -21,14 +21,19 @@ public class SceneHandler : MonoBehaviour
         SceneManager.LoadSceneAsync(SceneIndex,LoadSceneMode.Single);
     }
 
-    void OnLoaded()
+    IEnumerator OnLoaded()
     {
         FadeAnimator.SetTrigger("Fade In");
         LoadingIcon.SetActive(false);
+        yield return new WaitForSeconds(0.1f);
+        for (int i = 0; i < OtherUI.Length; i++)
+        {
+            OtherUI[i].enabled = true;
+        }
     }
 
     void Start()
     {
-        OnLoaded();
+        StartCoroutine(OnLoaded());
     }
 }

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c25785c75b619ec4a9f9786456a5cc52, type: 3}
+  m_Name: SocialLinks & Time management
+  m_EditorClassIdentifier: 
+  Name: Social Links & Time Management
+  Lines:
+  - 'Congratulations! You unlocked your first social link. Social links are Important
+    part of your streanght. '
+  - You can find Social link characters all over the shopping mall and other places.
+    by spending your time with them will increase your Demon level you can go up
+    to lvl 10 with any of the characters. at level 10 they may join you in your battles
+    to the top of your school, or give you special things to aid your battles. but
+    if you choose to hand out with any of your friends you won't be able to go to
+    school at that night.
+  - Time management is important as you have 145 days to reach the top and <"Spoiler">
+    to be defeated. Take your time to choose which your gonna do.
