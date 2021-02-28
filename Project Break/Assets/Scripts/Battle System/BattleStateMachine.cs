@@ -18,7 +18,21 @@ public class BattleStateMachine : MonoBehaviour
     public List<GameObject> HerosInBattle = new List<GameObject>();
     public List<GameObject> EnemysInBattle = new List<GameObject>();
 
-    private void Start()
+    public enum HeroGUI
+    { 
+        Activate,
+        Waiting,
+        Input,
+        SelectEnemy,
+        Done
+    }
+
+    public HeroGUI HeroInput;
+
+    public List<GameObject> HerosToManage = new List<GameObject>();
+    HandleTurn HeroChoice;
+
+    void Start()
     {
         BattleStates = PerformAction.Wait;
         EnemysInBattle.AddRange (GameObject.FindGameObjectsWithTag("Enemy"));
@@ -37,8 +51,6 @@ public class BattleStateMachine : MonoBehaviour
                 GameObject Performer = PerformersList[0].AttackerGameObject;
                 if (PerformersList[0].Type == "Enemy")
                 {
-                    if (Performer == null)
-                        Debug.Log("THE FUCK?");
                     EnemyStateMachine ESM = Performer.GetComponent<EnemyStateMachine>();
                     ESM.HeroToAttack = PerformersList[0].AttackersTarget.transform;
                     ESM.CurrentState = EnemyStateMachine.TurnState.Action;
