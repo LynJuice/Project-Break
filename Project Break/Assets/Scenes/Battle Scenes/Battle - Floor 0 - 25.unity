@@ -188,6 +188,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Alt
       objectReference: {fileID: 0}
+    - target: {fileID: 3197866392826341146, guid: 7149a278616ede6468e26477efd9c420,
+        type: 3}
+      propertyPath: m_TagString
+      value: Hero
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7149a278616ede6468e26477efd9c420, type: 3}
 --- !u!1 &171409562 stripped
@@ -209,7 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hero:
-    Name: 
+    Name: Player 1
     BaseHp: 0
     CurHp: 0
     BaseMp: 0
@@ -218,6 +223,8 @@ MonoBehaviour:
     intellect: 0
     agility: 0
     dexterity: 0
+  CurrentState: 0
+  ProgressBar: {fileID: 0}
 --- !u!1 &480059601
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,6 +499,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Happy Mitama
       objectReference: {fileID: 0}
+    - target: {fileID: 4386338930322891280, guid: 42e2582f60c4dbf4080546229d8098ac,
+        type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42e2582f60c4dbf4080546229d8098ac, type: 3}
 --- !u!1 &752025394 stripped
@@ -513,7 +525,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Enemy:
-    Name: 
+    Name: Enemy A
     EnemyType: 0
     rarity: 0
     BaseHp: 0
@@ -524,6 +536,8 @@ MonoBehaviour:
     curATK: 0
     BaseDef: 0
     curDef: 0
+  CurrentState: 0
+  HeroToAttack: {fileID: 0}
 --- !u!1 &753380408
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,7 +653,7 @@ PrefabInstance:
     - target: {fileID: 2822290381413203360, guid: 7149a278616ede6468e26477efd9c420,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 6.5
       objectReference: {fileID: 0}
     - target: {fileID: 2822290381413203360, guid: 7149a278616ede6468e26477efd9c420,
         type: 3}
@@ -691,6 +705,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3197866392826341146, guid: 7149a278616ede6468e26477efd9c420,
+        type: 3}
+      propertyPath: m_TagString
+      value: Hero
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7149a278616ede6468e26477efd9c420, type: 3}
 --- !u!1 &1594259224 stripped
@@ -712,7 +731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hero:
-    Name: 
+    Name: Player 2
     BaseHp: 0
     CurHp: 0
     BaseMp: 0
@@ -721,6 +740,14 @@ MonoBehaviour:
     intellect: 0
     agility: 0
     dexterity: 0
+  CurrentState: 0
+  ProgressBar: {fileID: 0}
+--- !u!4 &1594259226 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2822290381413203360, guid: 7149a278616ede6468e26477efd9c420,
+    type: 3}
+  m_PrefabInstance: {fileID: 1594259223}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1663936536
 GameObject:
   m_ObjectHideFlags: 0
@@ -787,6 +814,53 @@ Transform:
   m_Father: {fileID: 1093248344}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1720789819
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1720789821}
+  - component: {fileID: 1720789820}
+  m_Layer: 0
+  m_Name: Battle manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1720789820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720789819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e9c9d7b0f25d5499a7a845b43415ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BattleStates: 0
+  PerformersList: []
+  HerosInBattle: []
+  EnemysInBattle: []
+--- !u!4 &1720789821
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720789819}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12.381803, y: -7.2083316, z: 7.631748}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2012314833
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -798,6 +872,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Angry Mitama
+      objectReference: {fileID: 0}
+    - target: {fileID: 1141400114883149658, guid: 154225e93e4f054418181022997d276f,
+        type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 7317759609491299623, guid: 154225e93e4f054418181022997d276f,
         type: 3}
@@ -875,17 +954,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Enemy:
-    Name: 
-    EnemyType: 0
+    Name: Enemy B
+    EnemyType: 1
     rarity: 0
-    BaseHp: 0
-    CurHp: 0
-    BaseMp: 0
-    CurMp: 0
-    baseATK: 0
-    curATK: 0
-    BaseDef: 0
-    curDef: 0
+    BaseHp: 100
+    CurHp: 100
+    BaseMp: 125
+    CurMp: 125
+    baseATK: 25
+    curATK: 20
+    BaseDef: 5
+    curDef: 5
+  CurrentState: 0
+  HeroToAttack: {fileID: 1594259226}
 --- !u!1001 &4255362854435112028
 PrefabInstance:
   m_ObjectHideFlags: 0
