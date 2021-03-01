@@ -5,6 +5,7 @@ using UnityEngine;
 public class BaseHero
 {
     public string Name;
+    public Sprite Icon;
 
     [Header("Health")]
     public float BaseHp;
@@ -13,6 +14,12 @@ public class BaseHero
     [Header("Charge")]
     public float BaseMp;
     public float CurMp;
+
+    [Header("Defend & Attack")]
+    public int CurDef;
+    public int BaseDef;
+    public int CutAtk;
+    public int BaseAtk;
 
     [Header("Stats")]
     public int Stamina;

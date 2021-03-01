@@ -32,11 +32,14 @@ public class BattleStateMachine : MonoBehaviour
     public List<GameObject> HerosToManage = new List<GameObject>();
     HandleTurn HeroChoice;
 
-    void Start()
+    BattleInterface BI;
+
+    void Awake()
     {
         BattleStates = PerformAction.Wait;
         EnemysInBattle.AddRange (GameObject.FindGameObjectsWithTag("Enemy"));
         HerosInBattle.AddRange(GameObject.FindGameObjectsWithTag("Hero"));
+        BI = FindObjectOfType<BattleInterface>();
     }
 
     void Update()
@@ -66,6 +69,15 @@ public class BattleStateMachine : MonoBehaviour
             case (PerformAction.PerfomAction):
 
                 break;
+        }
+
+        for (int i = 0; i < HerosInBattle.Count; i++)
+        {
+            if (HerosInBattle[i].GetComponent<HeroStateMachine>().hero.CurHp <= 0)
+            {
+                BI.SetDead(HerosInBattle[i].GetComponent<HeroStateMachine>());
+                HerosInBattle.Remove(HerosInBattle[i]);
+            }
         }
     }
 

@@ -6,6 +6,7 @@ public class EnemyStateMachine : MonoBehaviour
 {
     public BaseEnemy Enemy;
     BattleStateMachine BSM;
+    Animator Anim;
 
     public enum TurnState
     {
@@ -62,6 +63,7 @@ public class EnemyStateMachine : MonoBehaviour
         CurrentState = TurnState.Processing;
         BSM = FindObjectOfType<BattleStateMachine>();
         StartPos = transform.position;
+        Anim = GetComponent<Animator>();
     }
 
     void UpgradeProgressBar()
@@ -93,6 +95,13 @@ public class EnemyStateMachine : MonoBehaviour
 
         Vector3 HeroPos = new Vector3(HeroToAttack.transform.position.x,HeroToAttack.position.y, HeroToAttack.position.z + 1.5f);
         while (MoveTowardsEnemy(HeroPos)) { yield return null; }
+
+        if (HeroToAttack.GetComponent<HeroStateMachine>().hero.CurDef < Random.Range(0, 100))
+            HeroToAttack.GetComponent<HeroStateMachine>().hero.CurHp -= Enemy.curATK;
+        else
+            Debug.Log("Blocked By: " + HeroToAttack.GetComponent<HeroStateMachine>().hero.Name);
+
+        Anim.SetTrigger("Attack");
 
         yield return new WaitForSeconds(0.5f);
 

@@ -54,6 +54,9 @@ public class HeroStateMachine : MonoBehaviour
 
                 break;
         }
+
+        if (hero.CurHp <= 0)
+            CurrentState = TurnState.Dead;
     }
 
     private void Start()

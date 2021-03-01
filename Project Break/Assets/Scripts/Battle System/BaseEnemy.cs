@@ -13,7 +13,6 @@ public class BaseEnemy
         Wind,
         Blessed,
         Cursed,
-        Nuke // To be removed?
     }
 
     public enum Rarity
