@@ -58,7 +58,7 @@ public class BattleInterface : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             if (Icons[i].sprite == HSM.hero.Icon && Healths[i].value <= 0)
-                Icons[i].color = Color.grey;
+                Icons[i].sprite = HSM.hero.IconDown;
         }
     }
 }

@@ -8,6 +8,9 @@ public class EnemyStateMachine : MonoBehaviour
     BattleStateMachine BSM;
     Animator Anim;
 
+    [Header("Used In PlayerStateMachine")]
+    public GameObject EnemySelected;
+
     public enum TurnState
     {
         Processing,
@@ -49,7 +52,7 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
 
             case (TurnState.Action):
-                StartCoroutine(TimeForAction());
+                StartCoroutine(Melle());
                 break;
 
             case (TurnState.Dead):
@@ -86,7 +89,7 @@ public class EnemyStateMachine : MonoBehaviour
         BSM.CollectActions(myAttack);
     }
 
-    IEnumerator TimeForAction()
+    IEnumerator Melle()
     {
         if (ActionStarted)
             yield break;

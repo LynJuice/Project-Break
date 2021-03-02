@@ -44,10 +44,26 @@ public class BattleStateMachine : MonoBehaviour
 
     void Update()
     {
+        int Performinces = EnemysInBattle.Count + HerosInBattle.Count;
+        if (PerformersList.Count > 0)
+        {
+            if (PerformersList[0].Type == "Enemy")
+            {
+                if (PerformersList[0].AttackersTarget.GetComponent<HeroStateMachine>().hero.CurHp <= 0)
+                    PerformersList.Remove(PerformersList[0]);
+            }
+
+            if (PerformersList[0].Type == "Hero")
+            {
+                if (PerformersList[0].AttackersTarget.GetComponent<EnemyStateMachine>().Enemy.CurHp <= 0)
+                    PerformersList.Remove(PerformersList[0]);
+            }
+        }
+
         switch (BattleStates)
         {
             case (PerformAction.Wait):
-                if (PerformersList.Count > 0)
+                if (PerformersList.Count >= Performinces)
                     BattleStates = PerformAction.TakeAction;
                 break;
             case (PerformAction.TakeAction):
@@ -60,8 +76,10 @@ public class BattleStateMachine : MonoBehaviour
                 }
 
                 if (PerformersList[0].Type == "Hero")
-                { 
-                    
+                {
+                    HeroStateMachine HSM = Performer.GetComponent<HeroStateMachine>();
+                    HSM.EnemyToAttack = PerformersList[0].AttackersTarget.transform;
+                    HSM.CurrentState = HeroStateMachine.TurnState.Action;
                 }
 
                 BattleStates = PerformAction.PerfomAction;
@@ -71,6 +89,7 @@ public class BattleStateMachine : MonoBehaviour
                 break;
         }
 
+        /*
         for (int i = 0; i < HerosInBattle.Count; i++)
         {
             if (HerosInBattle[i].GetComponent<HeroStateMachine>().hero.CurHp <= 0)
@@ -79,10 +98,18 @@ public class BattleStateMachine : MonoBehaviour
                 HerosInBattle.Remove(HerosInBattle[i]);
             }
         }
+        */
     }
 
     public void CollectActions(HandleTurn input)
     {
+        for (int i = 0; i < PerformersList.Count; i++)
+        {
+            if (PerformersList[i].Attacker == input.Attacker)
+                return;
+        }
+
+
         PerformersList.Add(input);
     }
 }

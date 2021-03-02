@@ -5,7 +5,12 @@ using UnityEngine;
 public class BaseHero
 {
     public string Name;
+
+    [Space]
+
+    [Header("Icons")]
     public Sprite Icon;
+    public Sprite IconDown;
 
     [Header("Health")]
     public float BaseHp;
