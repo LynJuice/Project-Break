@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class BattleStateMachine : MonoBehaviour
 {
+    bool Waiting;
     public enum PerformAction
-    { 
+    {
         Wait,
         TakeAction,
         PerfomAction
@@ -18,8 +19,10 @@ public class BattleStateMachine : MonoBehaviour
     public List<GameObject> HerosInBattle = new List<GameObject>();
     public List<GameObject> EnemysInBattle = new List<GameObject>();
 
+    int NumberOfPerformers;
+
     public enum HeroGUI
-    { 
+    {
         Activate,
         Waiting,
         Input,
@@ -37,12 +40,29 @@ public class BattleStateMachine : MonoBehaviour
     void Awake()
     {
         BattleStates = PerformAction.Wait;
-        EnemysInBattle.AddRange (GameObject.FindGameObjectsWithTag("Enemy"));
+        EnemysInBattle.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
         HerosInBattle.AddRange(GameObject.FindGameObjectsWithTag("Hero"));
         BI = FindObjectOfType<BattleInterface>();
     }
+    IEnumerator HandlePlayersTurn()
+    {
+        for (int i = 0; i < HerosInBattle.Count; i++)
+        {
+            HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn = true;
+            yield return new WaitUntil(() => HerosInBattle[i].GetComponent<HeroStateMachine>().Done);
+            HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn = false;
+            HerosInBattle[i].GetComponent<HeroStateMachine>().Done = false;
+            yield return new WaitForSeconds(1);
+            Debug.Log("Turn End");
+        }
 
-    void Update()
+        for (int i = 0; i < PerformersList.Count; i++)
+        {
+            BattleStates = PerformAction.TakeAction;
+            yield return new WaitUntil(() => Waiting);
+        }
+    }
+    void CheckForDupes()
     {
         int Performinces = EnemysInBattle.Count + HerosInBattle.Count;
         if (PerformersList.Count > 0)
@@ -59,12 +79,20 @@ public class BattleStateMachine : MonoBehaviour
                     PerformersList.Remove(PerformersList[0]);
             }
         }
+    }
+    void Battlestating()
+    {
+        if (BattleStates == PerformAction.Wait)
+            Waiting = true;
+        else
+            Waiting = false;
+
+        NumberOfPerformers = (HerosInBattle.Count + EnemysInBattle.Count);
 
         switch (BattleStates)
         {
             case (PerformAction.Wait):
-                if (PerformersList.Count >= Performinces)
-                    BattleStates = PerformAction.TakeAction;
+                StartCoroutine(HandlePlayersTurn());
                 break;
             case (PerformAction.TakeAction):
                 GameObject Performer = PerformersList[0].AttackerGameObject;
@@ -88,17 +116,12 @@ public class BattleStateMachine : MonoBehaviour
 
                 break;
         }
+    }
 
-        /*
-        for (int i = 0; i < HerosInBattle.Count; i++)
-        {
-            if (HerosInBattle[i].GetComponent<HeroStateMachine>().hero.CurHp <= 0)
-            {
-                BI.SetDead(HerosInBattle[i].GetComponent<HeroStateMachine>());
-                HerosInBattle.Remove(HerosInBattle[i]);
-            }
-        }
-        */
+    void Update()
+    {
+        CheckForDupes();
+        Battlestating();
     }
 
     public void CollectActions(HandleTurn input)

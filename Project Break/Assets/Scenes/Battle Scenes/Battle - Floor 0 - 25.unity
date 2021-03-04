@@ -239,7 +239,9 @@ MonoBehaviour:
   ProgressBar: {fileID: 0}
   EnemyToAttack: {fileID: 0}
   StartPos: {x: 0, y: 0, z: 0}
+  MyTurn: 0
   AnimSpeed: 17
+  Done: 0
 --- !u!1 &480059601
 GameObject:
   m_ObjectHideFlags: 0

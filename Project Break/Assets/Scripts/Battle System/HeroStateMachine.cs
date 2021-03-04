@@ -41,8 +41,10 @@ public class HeroStateMachine : MonoBehaviour
 
     public Transform EnemyToAttack;
     public Vector3 StartPos;
-
+    public bool MyTurn;
     public float AnimSpeed = 17;
+
+    public bool Done;
 
     void Update()
     {
@@ -55,36 +57,36 @@ public class HeroStateMachine : MonoBehaviour
            StartCoroutine(ChooseEnemy());
         }
 
+        if(MyTurn)
+            switch (CurrentState)
+            {
+                case (TurnState.Processing):
+                    UpgradeProgressBar();
+                    break;
 
-        switch (CurrentState)
-        {
-            case (TurnState.Processing):
-                UpgradeProgressBar();
-                break;
+                case (TurnState.AddToList):
+                    CurrentSelection = SelectingEnemy.Selecting;
+                    CurrentState = TurnState.Waiting;
+                    break;
 
-            case (TurnState.AddToList):
-                CurrentSelection = SelectingEnemy.Selecting;
-                CurrentState = TurnState.Waiting;
-                break;
+                case (TurnState.Waiting):
+                    // Idle
+                    break;
 
-            case (TurnState.Waiting):
-                // Idle
-                break;
+                case (TurnState.Selecting):
 
-            case (TurnState.Selecting):
-
-                break;
+                    break;
 
 
-            case (TurnState.Action):
-                CurrentSelection = SelectingEnemy.NotSelecting;
-               StartCoroutine(Melle());
-                break;
+                case (TurnState.Action):
+                    CurrentSelection = SelectingEnemy.NotSelecting;
+                    StartCoroutine(Melle());
+                    break;
 
-            case (TurnState.Dead):
+                case (TurnState.Dead):
 
-                break;
-        }
+                    break;
+            }
 
         if (hero.CurHp <= 0)
             CurrentState = TurnState.Dead;
@@ -142,6 +144,7 @@ public class HeroStateMachine : MonoBehaviour
         if(CurrentSelection == SelectingEnemy.Selecting)
             ChooseAction(Selected);
         CurrentSelection = SelectingEnemy.EnemySelected;
+        Done = true;
     }
 
     IEnumerator Melle()
