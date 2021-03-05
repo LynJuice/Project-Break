@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class BattleStateMachine : MonoBehaviour
 {
-    bool Waiting;
+    public SceneHandler SH;
+    [SerializeField] GameObject Temp;
+    public int CurrentRound = 1;
+    [HideInInspector] public int Turns;
+    public bool PlayerCanChooseTimer;
+    public bool PlayerWaited;
     public enum PerformAction
     {
         Wait,
@@ -33,33 +38,29 @@ public class BattleStateMachine : MonoBehaviour
     public HeroGUI HeroInput;
 
     public List<GameObject> HerosToManage = new List<GameObject>();
-    HandleTurn HeroChoice;
-
-    BattleInterface BI;
 
     void Awake()
     {
         BattleStates = PerformAction.Wait;
         EnemysInBattle.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
         HerosInBattle.AddRange(GameObject.FindGameObjectsWithTag("Hero"));
-        BI = FindObjectOfType<BattleInterface>();
+        SH = FindObjectOfType<SceneHandler>();
     }
+
     IEnumerator HandlePlayersTurn()
     {
+        PlayerWaited = true;
         for (int i = 0; i < HerosInBattle.Count; i++)
         {
-            HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn = true;
-            yield return new WaitUntil(() => HerosInBattle[i].GetComponent<HeroStateMachine>().Done);
-            HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn = false;
-            HerosInBattle[i].GetComponent<HeroStateMachine>().Done = false;
-            yield return new WaitForSeconds(1);
-            Debug.Log("Turn End");
-        }
-
-        for (int i = 0; i < PerformersList.Count; i++)
-        {
-            BattleStates = PerformAction.TakeAction;
-            yield return new WaitUntil(() => Waiting);
+            if (!HerosInBattle[i].GetComponent<HeroStateMachine>().Done)
+            {
+                HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn = true;
+                Debug.Log(HerosInBattle[i].GetComponent<HeroStateMachine>().hero.Name + "'s turn");
+                yield return new WaitUntil(() => HerosInBattle[i].GetComponent<HeroStateMachine>().Done);
+                HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn = false;
+                PlayerCanChooseTimer = false;
+                Debug.Log(HerosInBattle[i].GetComponent<HeroStateMachine>().hero.Name + "'s turn is done");
+            }
         }
     }
     void CheckForDupes()
@@ -82,24 +83,33 @@ public class BattleStateMachine : MonoBehaviour
     }
     void Battlestating()
     {
-        if (BattleStates == PerformAction.Wait)
-            Waiting = true;
-        else
-            Waiting = false;
-
         NumberOfPerformers = (HerosInBattle.Count + EnemysInBattle.Count);
+        int NumberOfPerformersminus = NumberOfPerformers - Turns;
+        if(Turns == NumberOfPerformers)
+        {
+            Turns = 0;
+            StartNewTurn(); // round
+        }
 
         switch (BattleStates)
         {
             case (PerformAction.Wait):
+
+                //     if(!PlayerWaited)
                 StartCoroutine(HandlePlayersTurn());
+
+                if (PerformersList.Count > 0)
+                    if (NumberOfPerformersminus <= PerformersList.Count || PerformersList[0].Type == "Hero")
+                        BattleStates = PerformAction.TakeAction;
                 break;
             case (PerformAction.TakeAction):
+                PlayerWaited = false;
                 GameObject Performer = PerformersList[0].AttackerGameObject;
                 if (PerformersList[0].Type == "Enemy")
                 {
                     EnemyStateMachine ESM = Performer.GetComponent<EnemyStateMachine>();
                     ESM.HeroToAttack = PerformersList[0].AttackersTarget.transform;
+                    Turns++;
                     ESM.CurrentState = EnemyStateMachine.TurnState.Action;
                 }
 
@@ -107,13 +117,34 @@ public class BattleStateMachine : MonoBehaviour
                 {
                     HeroStateMachine HSM = Performer.GetComponent<HeroStateMachine>();
                     HSM.EnemyToAttack = PerformersList[0].AttackersTarget.transform;
+                    Turns++;
                     HSM.CurrentState = HeroStateMachine.TurnState.Action;
                 }
+
+                if (PerformersList[0].Type == "Elimental - Hero")
+                {
+                    HeroStateMachine HSM = Performer.GetComponent<HeroStateMachine>();
+
+                }
+
+                if (PerformersList[0].Type == "Nulled")
+                {
+                    HeroStateMachine HSM = Performer.GetComponent<HeroStateMachine>();
+
+                    if (HSM.Guard)
+                        HSM.TryToBlock();
+                    if(HSM.Escape)
+                        HSM.EscapeTest();
+
+                    Turns++;
+                    HSM.CurrentState = HeroStateMachine.TurnState.Action;
+                    HSM.hero.CurDef = HSM.hero.BaseDef;
+                }
+
 
                 BattleStates = PerformAction.PerfomAction;
                 break;
             case (PerformAction.PerfomAction):
-
                 break;
         }
     }
@@ -134,5 +165,46 @@ public class BattleStateMachine : MonoBehaviour
 
 
         PerformersList.Add(input);
+    }
+
+    void StartNewTurn()
+    {
+        for (int i = 0; i < HerosInBattle.Count; i++)
+        {
+            HerosInBattle[i].GetComponent<HeroStateMachine>().Done = false;
+            HerosInBattle[i].GetComponent<HeroStateMachine>().hero.CurDef = HerosInBattle[i].GetComponent<HeroStateMachine>().hero.BaseDef;
+        }
+        CurrentRound++;
+        BattleStates = PerformAction.Wait;
+        Debug.Log("New Round Started");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////    PLAYER BUTTONS    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
+
+    public void SelectStrike()
+    {
+        for (int i = 0; i < HerosInBattle.Count; i++)
+        {
+            if(HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn)
+                HerosInBattle[i].GetComponent<HeroStateMachine>().Strike = true;
+        }
+    }
+
+    public void SelectEscape()
+    {
+        for (int i = 0; i < HerosInBattle.Count; i++)
+        {
+            if (HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn)
+                HerosInBattle[i].GetComponent<HeroStateMachine>().Escape = true;
+        }
+    }
+
+    public void SelectBlock()
+    {
+        for (int i = 0; i < HerosInBattle.Count; i++)
+        {
+            if (HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn)
+                HerosInBattle[i].GetComponent<HeroStateMachine>().Guard = true;
+        }
     }
 }

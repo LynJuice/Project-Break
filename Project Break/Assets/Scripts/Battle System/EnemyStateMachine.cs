@@ -43,9 +43,9 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
 
             case (TurnState.ChoosingAction):
-                ChooseAction();
-                CurrentState = TurnState.Waiting;
-                break;
+                    ChooseAction();
+                    CurrentState = TurnState.Waiting;
+               break;
 
             case (TurnState.Waiting):
                 // Idle

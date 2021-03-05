@@ -162,7 +162,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
   Health: {fileID: 1058504612129621161}
-  Charge: {fileID: 4475065237375288231}
 --- !u!1 &635434620930627375
 GameObject:
   m_ObjectHideFlags: 0

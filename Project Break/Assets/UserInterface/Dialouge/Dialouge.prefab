@@ -412,9 +412,6 @@ MonoBehaviour:
   TalkerIcon: {fileID: 0}
   TalkerFace: {fileID: 0}
   DialougeBox: {fileID: 7967595149998180192}
-  AnwserA: {fileID: 0}
-  AnwserB: {fileID: 0}
-  AnwserC: {fileID: 0}
   TestConversation: {fileID: 0}
 --- !u!1 &3419675883281859425
 GameObject:
@@ -1312,7 +1309,7 @@ GameObject:
   - component: {fileID: 1755824261996926111}
   - component: {fileID: 4860551373575265634}
   m_Layer: 5
-  m_Name: User Interface
+  m_Name: Dialouge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

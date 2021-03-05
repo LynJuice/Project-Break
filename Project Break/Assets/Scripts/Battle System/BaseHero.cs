@@ -16,7 +16,8 @@ public class BaseHero
     public float BaseHp;
     public float CurHp;
 
-    [Header("Charge")]
+    [Header("Spirit")]
+    public BaseSpirt Spirit;
     public float BaseMp;
     public float CurMp;
 
@@ -31,4 +32,22 @@ public class BaseHero
     public int intellect;
     public int agility;
     public int dexterity;
+}
+
+[System.Serializable]
+public class BaseSpirt
+{
+    public string SpiritsName;
+    public Eliment eliment;
+    public GameObject Model;
+
+    public enum Eliment
+    {
+        Ice,
+        Fire,
+        Electric,
+        Wind,
+        Blessed,
+        Cursed,
+    }
 }

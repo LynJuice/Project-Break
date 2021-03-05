@@ -5,7 +5,6 @@ using UnityEngine;
 public class BaseEnemy
 {
     public string Name;
-
     public enum Type{
         Ice,
         Fire,
@@ -14,7 +13,6 @@ public class BaseEnemy
         Blessed,
         Cursed,
     }
-
     public enum Rarity
     { 
         Common,
