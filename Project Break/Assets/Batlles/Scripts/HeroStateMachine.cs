@@ -16,10 +16,9 @@ public class HeroStateMachine : MonoBehaviour
     public bool Escape;
 
     [Header("Selecting Enemy")]
-    int Selected;
-    bool SpacePressed;
-    bool AlreadySelected;
-    bool Select;
+    public int SelectedEnemy;
+    public bool Selecting;
+
     public enum SelectingEnemy
     {
         Selecting,
@@ -56,20 +55,10 @@ public class HeroStateMachine : MonoBehaviour
 
     void Update()
     {
-        if (Escape)
-            ChooseAction(0,true);
-
         if (Guard)
             TryToBlock();
-
-        SpacePressed = Input.GetKey(KeyCode.Space);
-
-        if (CurrentSelection == SelectingEnemy.Selecting)
-        {
-            SwitchEnemy();
-
-           StartCoroutine(ChooseEnemy());
-        }
+        if (Selecting)
+            SelectEnemy();
 
             switch (CurrentState)
             {
@@ -101,8 +90,7 @@ public class HeroStateMachine : MonoBehaviour
 
                     break;
             }
-
-        if (hero.CurHp <= 0)
+        if (IsDead())
             CurrentState = TurnState.Dead;
     }
     private void Start()
@@ -121,69 +109,41 @@ public class HeroStateMachine : MonoBehaviour
             CurrentState = TurnState.AddToList;
         }
     }  // WHY
-    void ChooseAction(int NNN, bool nulled = false)
+    void SelectEnemy()
     {
-        if (!nulled)
+        if(Selecting)
         {
-            HandleTurn myAttack = new HandleTurn();
-            myAttack.Attacker = hero.Name;
-            myAttack.Type = "Hero";
-            myAttack.AttackerGameObject = gameObject;
-            myAttack.AttackersTarget = BSM.EnemysInBattle[NNN];
-            BSM.CollectActions(myAttack);
-        }
-        else 
-        {
-            HandleTurn myAttack = new HandleTurn();
-            myAttack.Attacker = hero.Name;
-            myAttack.Type = "Nulled";
-            myAttack.AttackerGameObject = gameObject;
-            myAttack.AttackersTarget = null;
-            BSM.CollectActions(myAttack);
-            Done = true;
-        }
-    }
-    void SwitchEnemy()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-            Selected--;
+            int t = BSM.EnemysInBattle.Count;
+            t--;
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+                SelectedEnemy--;
+            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+                SelectedEnemy++;
+            if (SelectedEnemy > t)
+                SelectedEnemy = 0;
+            if (SelectedEnemy < 0)
+                SelectedEnemy = t;
 
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-            Selected++;
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                for (int i = 0; i < BSM.EnemysInBattle.Count; i++)
+                {
+                    BSM.EnemysInBattle[i].GetComponent<EnemyStateMachine>().EnemySelected.SetActive(false);
+                }
 
-        if (Select)
+                Selecting = false;
+            }
+
             for (int i = 0; i < BSM.EnemysInBattle.Count; i++)
             {
-                if (i == Selected)
+                if (i == SelectedEnemy)
                     BSM.EnemysInBattle[i].GetComponent<EnemyStateMachine>().EnemySelected.SetActive(true);
                 else
                     BSM.EnemysInBattle[i].GetComponent<EnemyStateMachine>().EnemySelected.SetActive(false);
             }
-        if (!Select)
-            for (int i = 0; i < BSM.EnemysInBattle.Count; i++)
-            {
-                BSM.EnemysInBattle[i].GetComponent<EnemyStateMachine>().EnemySelected.SetActive(false);
-            }
+        }
     }
-    IEnumerator ChooseEnemy()
-    {
-        if (Strike)
-            if (MyTurn && !Done)
-            {
-                EnemyStateMachine[] Enemys = FindObjectsOfType<EnemyStateMachine>();
-                Select = true;
-                yield return new WaitUntil(() => SpacePressed);
-                if (CurrentSelection == SelectingEnemy.Selecting)
-                    ChooseAction(Selected);
-                Select = false;
-                Done = true;
-                Strike = false;
-                EnemyToAttack = BSM.EnemysInBattle[Selected].transform;
-                CurrentSelection = SelectingEnemy.EnemySelected;
-            }
-
-    }
-    IEnumerator Melle()
+    IEnumerator Melle() // Rewrite
     {
         if (ActionStarted)
             yield break;
@@ -227,6 +187,7 @@ public class HeroStateMachine : MonoBehaviour
             Debug.Log("Failed");
         }
         BSM.PerformersList.RemoveAt(0);
+        BSM.Turns++;
         Escape = false;
     }
     public void TryToBlock()
@@ -236,5 +197,19 @@ public class HeroStateMachine : MonoBehaviour
         Done = true;
         BSM.Turns++;
         Guard = false;
+    }
+
+    public bool IsDead()
+    {
+        if (hero.CurHp <= 0)
+        {
+            BSM.BI.SetDead(this);
+            BSM.HerosInBattle.Remove(gameObject);
+        }
+        if (hero.CurHp <= 0)
+            return true;
+        else return false;
+
+
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class BattleStateMachine : MonoBehaviour
 {
     public SceneHandler SH;
+    public BattleInterface BI;
     [SerializeField] GameObject Temp;
     public int CurrentRound = 1;
     [HideInInspector] public int Turns;
@@ -45,6 +46,7 @@ public class BattleStateMachine : MonoBehaviour
         EnemysInBattle.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
         HerosInBattle.AddRange(GameObject.FindGameObjectsWithTag("Hero"));
         SH = FindObjectOfType<SceneHandler>();
+        BI = FindObjectOfType<BattleInterface>();
     }
 
     IEnumerator HandlePlayersTurn()
@@ -85,7 +87,7 @@ public class BattleStateMachine : MonoBehaviour
     {
         NumberOfPerformers = (HerosInBattle.Count + EnemysInBattle.Count);
         int NumberOfPerformersminus = NumberOfPerformers - Turns;
-        if(Turns == NumberOfPerformers)
+        if (Turns == NumberOfPerformers)
         {
             Turns = 0;
             StartNewTurn(); // round
@@ -97,10 +99,16 @@ public class BattleStateMachine : MonoBehaviour
 
                 //     if(!PlayerWaited)
                 StartCoroutine(HandlePlayersTurn());
+                int e = 0;
+                for (int i = 0; i < HerosInBattle.Count; i++)
+                {
+                    if (HerosInBattle[i].GetComponent<HeroStateMachine>().Done)
+                        e++;
+                }
 
-                if (PerformersList.Count > 0)
-                    if (NumberOfPerformersminus <= PerformersList.Count || PerformersList[0].Type == "Hero")
-                        BattleStates = PerformAction.TakeAction;
+                if (e == HerosInBattle.Count  && PerformersList.Count > 0)
+                    BattleStates = PerformAction.TakeAction;
+
                 break;
             case (PerformAction.TakeAction):
                 PlayerWaited = false;
@@ -108,40 +116,19 @@ public class BattleStateMachine : MonoBehaviour
                 if (PerformersList[0].Type == "Enemy")
                 {
                     EnemyStateMachine ESM = Performer.GetComponent<EnemyStateMachine>();
-                    ESM.HeroToAttack = PerformersList[0].AttackersTarget.transform;
-                    Turns++;
-                    ESM.CurrentState = EnemyStateMachine.TurnState.Action;
+
+                    if (HerosInBattle.Contains(PerformersList[0].AttackersTarget))
+                    {
+                        ESM.HeroToAttack = PerformersList[0].AttackersTarget.transform;
+                        Turns++;
+                        ESM.CurrentState = EnemyStateMachine.TurnState.Action;
+                    }
+                    else
+                    {
+                        Debug.Log("No attackobject");
+                        PerformersList.RemoveAt(0);
+                    }
                 }
-
-                if (PerformersList[0].Type == "Hero")
-                {
-                    HeroStateMachine HSM = Performer.GetComponent<HeroStateMachine>();
-                    HSM.EnemyToAttack = PerformersList[0].AttackersTarget.transform;
-                    Turns++;
-                    HSM.CurrentState = HeroStateMachine.TurnState.Action;
-                }
-
-                if (PerformersList[0].Type == "Elimental - Hero")
-                {
-                    HeroStateMachine HSM = Performer.GetComponent<HeroStateMachine>();
-
-                }
-
-                if (PerformersList[0].Type == "Nulled")
-                {
-                    HeroStateMachine HSM = Performer.GetComponent<HeroStateMachine>();
-
-                    if (HSM.Guard)
-                        HSM.TryToBlock();
-                    if(HSM.Escape)
-                        HSM.EscapeTest();
-
-                    Turns++;
-                    HSM.CurrentState = HeroStateMachine.TurnState.Action;
-                    HSM.hero.CurDef = HSM.hero.BaseDef;
-                }
-
-
                 BattleStates = PerformAction.PerfomAction;
                 break;
             case (PerformAction.PerfomAction):
@@ -153,6 +140,7 @@ public class BattleStateMachine : MonoBehaviour
     {
         CheckForDupes();
         Battlestating();
+        CheckWinLose();
     }
 
     public void CollectActions(HandleTurn input)
@@ -174,37 +162,30 @@ public class BattleStateMachine : MonoBehaviour
             HerosInBattle[i].GetComponent<HeroStateMachine>().Done = false;
             HerosInBattle[i].GetComponent<HeroStateMachine>().hero.CurDef = HerosInBattle[i].GetComponent<HeroStateMachine>().hero.BaseDef;
         }
+
+        for (int i = 0; i < EnemysInBattle.Count; i++)
+        {
+            EnemysInBattle[i].GetComponent<EnemyStateMachine>().Done = false;
+        }
         CurrentRound++;
         BattleStates = PerformAction.Wait;
         Debug.Log("New Round Started");
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////    PLAYER BUTTONS    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
-
-    public void SelectStrike()
+    void CheckWinLose()
     {
-        for (int i = 0; i < HerosInBattle.Count; i++)
-        {
-            if(HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn)
-                HerosInBattle[i].GetComponent<HeroStateMachine>().Strike = true;
-        }
+        if (HerosInBattle.Count == 0)
+            Debug.Log("Lost");
+
+        if (EnemysInBattle.Count == 0)
+            Debug.Log("Won");
     }
 
-    public void SelectEscape()
+    void AddPower(BaseHero hero, Power power)
     {
-        for (int i = 0; i < HerosInBattle.Count; i++)
-        {
-            if (HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn)
-                HerosInBattle[i].GetComponent<HeroStateMachine>().Escape = true;
-        }
-    }
-
-    public void SelectBlock()
-    {
-        for (int i = 0; i < HerosInBattle.Count; i++)
-        {
-            if (HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn)
-                HerosInBattle[i].GetComponent<HeroStateMachine>().Guard = true;
-        }
+        if (hero.Spirit.Powers.Count >= 6)
+            return;
+        else
+            hero.Spirit.Powers.Add(power);
     }
 }

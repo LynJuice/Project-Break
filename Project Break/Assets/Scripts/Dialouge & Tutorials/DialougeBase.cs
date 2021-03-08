@@ -11,7 +11,7 @@ public struct ScriptableLines
     public string line;
 }
 
-[CreateAssetMenu(fileName = "Conversation", menuName = "DialougeSystem/New Conversation")]
+[CreateAssetMenu(fileName = "Conversation", menuName = "Dialouge Tutorial System/New Conversation")]
 public class ScriptableConversation : ScriptableObject
 {
     public ScriptableLines[] Conversation;

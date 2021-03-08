@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -38,8 +39,10 @@ public class BaseHero
 public class BaseSpirt
 {
     public string SpiritsName;
-    public Eliment eliment;
+    public Eliment Weakness;
     public GameObject Model;
+
+    public List<Power> Powers = new List<Power>(6); // MAX 6
 
     public enum Eliment
     {

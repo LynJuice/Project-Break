@@ -10,14 +10,6 @@ public class HandleTurn
 
     public GameObject AttackerGameObject;
     public GameObject AttackersTarget;
-
-    public enum Eliment
-    {
-        Ice,
-        Fire,
-        Electric,
-        Wind,
-        Blessed,
-        Cursed,
-    }
+    
+    public Power PowerUsed;
 }

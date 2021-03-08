@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyStateMachine : MonoBehaviour
 {
+    public bool Done;
+
     public BaseEnemy Enemy;
     BattleStateMachine BSM;
     Animator Anim;
@@ -43,8 +45,11 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
 
             case (TurnState.ChoosingAction):
+                if (!Done)
+                {
                     ChooseAction();
                     CurrentState = TurnState.Waiting;
+                }
                break;
 
             case (TurnState.Waiting):
@@ -58,6 +63,20 @@ public class EnemyStateMachine : MonoBehaviour
             case (TurnState.Dead):
 
                 break;
+        }
+
+        if (IsDead())
+        {
+            CurrentState = TurnState.Dead;
+            BSM.EnemysInBattle.Remove(gameObject);
+
+            for (int i = 0; i < BSM.PerformersList.Count; i++)
+            {
+                if (BSM.PerformersList[i].AttackerGameObject == gameObject)
+                    BSM.PerformersList.RemoveAt(i);
+            }
+
+            Destroy(gameObject);
         }
     }
 
@@ -82,10 +101,20 @@ public class EnemyStateMachine : MonoBehaviour
     void ChooseAction()
     {
         HandleTurn myAttack = new HandleTurn();
+
+        if (BSM.HerosInBattle.Count == 0)
+            return;
+
+        GameObject Herotoattack = BSM.HerosInBattle[Random.Range(0, BSM.HerosInBattle.Count)];
+
+        if (Herotoattack.GetComponent<HeroStateMachine>().IsDead())
+            return;
+
         myAttack.Attacker = Enemy.Name;
         myAttack.Type = "Enemy";
         myAttack.AttackerGameObject = gameObject;
-        myAttack.AttackersTarget = BSM.HerosInBattle[Random.Range(0, BSM.HerosInBattle.Count)]; // To be replaced
+        myAttack.AttackersTarget = Herotoattack; // To be replaced
+        Done = true;
         BSM.CollectActions(myAttack);
     }
 
@@ -122,5 +151,13 @@ public class EnemyStateMachine : MonoBehaviour
     bool MoveTowardsEnemy(Vector3 target)
     {
         return target != (transform.position = Vector3.MoveTowards(transform.position, target, AnimSpeed * Time.deltaTime));
+    }
+
+    bool IsDead()
+    {
+        if (Enemy.CurHp <= 0)
+            return true;
+        else
+            return false;
     }
 }
