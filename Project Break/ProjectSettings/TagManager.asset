@@ -7,6 +7,7 @@ TagManager:
   - DeadUnit
   - Enemy
   - Hero
+  - Camera Collision Ignore
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Player
   - Enemy
   - MiniMap
-  - 
+  - Camera Collision Ignore
   - 
   - 
   - 

@@ -19,6 +19,10 @@ public class HeroStateMachine : MonoBehaviour
     public int SelectedEnemy;
     public bool Selecting;
 
+
+    [SerializeField] Animator Anim;
+
+
     public enum SelectingEnemy
     {
         Selecting,
@@ -57,6 +61,13 @@ public class HeroStateMachine : MonoBehaviour
     {
         if (Guard)
             TryToBlock();
+
+        if (Strike)
+            Selecting = true;
+
+        if (Escape)
+            EscapeTest();
+
         if (Selecting)
             SelectEnemy();
 
@@ -111,7 +122,7 @@ public class HeroStateMachine : MonoBehaviour
     }  // WHY
     void SelectEnemy()
     {
-        if(Selecting)
+        if (Selecting)
         {
             int t = BSM.EnemysInBattle.Count;
             t--;
@@ -131,6 +142,15 @@ public class HeroStateMachine : MonoBehaviour
                     BSM.EnemysInBattle[i].GetComponent<EnemyStateMachine>().EnemySelected.SetActive(false);
                 }
 
+                EnemyToAttack = BSM.EnemysInBattle[SelectedEnemy].transform;
+
+                if (Strike)
+                {
+                    Done = true;
+                    BSM.Turns++;
+                    StartCoroutine(Melle());
+                }
+
                 Selecting = false;
             }
 
@@ -141,6 +161,11 @@ public class HeroStateMachine : MonoBehaviour
                 else
                     BSM.EnemysInBattle[i].GetComponent<EnemyStateMachine>().EnemySelected.SetActive(false);
             }
+            if (!Selecting)
+                for (int i = 0; i < BSM.EnemysInBattle.Count; i++)
+                {
+                    BSM.EnemysInBattle[i].GetComponent<EnemyStateMachine>().EnemySelected.SetActive(false);
+                }
         }
     }
     IEnumerator Melle() // Rewrite
@@ -149,27 +174,17 @@ public class HeroStateMachine : MonoBehaviour
             yield break;
 
         ActionStarted = true;
+        Anim.SetBool("Walk", true);
 
         Vector3 HeroPos = new Vector3(EnemyToAttack.transform.position.x, EnemyToAttack.position.y, EnemyToAttack.position.z + 1.5f);
         while (MoveTowardsEnemy(HeroPos)) { yield return null; }
 
-        if (EnemyToAttack.GetComponent<EnemyStateMachine>().Enemy.curDef < Random.Range(0, 100))
-            EnemyToAttack.GetComponent<EnemyStateMachine>().Enemy.CurHp -= hero.CutAtk;
-        else
-            Debug.Log("Blocked By: " + EnemyToAttack.GetComponent<EnemyStateMachine>().Enemy.Name);
+        EnemyToAttack.gameObject.GetComponent<EnemyStateMachine>().ReciveDamage(hero.CutAtk,hero);
 
         yield return new WaitForSeconds(0.5f);
 
         while (MoveTowardsEnemy(StartPos)) { yield return null; }
-
-        // after it completes
-
-        BSM.PerformersList.RemoveAt(0);
-        BSM.BattleStates = BattleStateMachine.PerformAction.Wait;
-
-        ActionStarted = false;
-        CurCoolDown = 0;
-        CurrentState = TurnState.Processing;
+        Anim.SetBool("Walk", false);
     }
     bool MoveTowardsEnemy(Vector3 target)
     {
@@ -186,8 +201,8 @@ public class HeroStateMachine : MonoBehaviour
         {
             Debug.Log("Failed");
         }
-        BSM.PerformersList.RemoveAt(0);
         BSM.Turns++;
+        Done = true;
         Escape = false;
     }
     public void TryToBlock()
@@ -209,7 +224,5 @@ public class HeroStateMachine : MonoBehaviour
         if (hero.CurHp <= 0)
             return true;
         else return false;
-
-
     }
 }

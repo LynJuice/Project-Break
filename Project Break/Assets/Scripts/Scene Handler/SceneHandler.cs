@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SceneHandler : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class SceneHandler : MonoBehaviour
             OtherUI[i].enabled = false;
         }
 
+        LoadingIcon.GetComponentInParent<Image>().enabled = true;
         FadeAnimator.SetTrigger("Fade Out");
         yield return new WaitForSeconds(0.8f);
         LoadingIcon.SetActive(true);
@@ -23,12 +25,40 @@ public class SceneHandler : MonoBehaviour
 
     IEnumerator OnLoaded()
     {
-        FadeAnimator.SetTrigger("Fade In");
-        LoadingIcon.SetActive(false);
-        yield return new WaitForSeconds(0.1f);
-        for (int i = 0; i < OtherUI.Length; i++)
+        int FromSave = PlayerPrefs.GetInt("FromSave");
+
+        if (FromSave == 0)
         {
-            OtherUI[i].enabled = true;
+            FadeAnimator.SetTrigger("Fade In");
+            LoadingIcon.SetActive(false);
+            yield return new WaitForSeconds(0.1f);
+            for (int i = 0; i < OtherUI.Length; i++)
+            {
+                OtherUI[i].enabled = true;
+            }
+            yield return new WaitForSeconds(4);
+            LoadingIcon.GetComponentInParent<Image>().enabled = false;
+        }else
+        {
+            PlayerPrefs.DeleteKey("FromSave");
+
+            PlayerMovement Pm = FindObjectOfType<PlayerMovement>();
+            SavedData data = FindObjectOfType<SceneDataTransfer>().data;
+
+            Vector3 Pos = new Vector3(data.Position[0], data.Position[1], data.Position[2]);
+            Pm.GetComponent<Transform>().position = Pos;
+
+         //   Pm.GetComponent<Inventory>().Items = data.Items;
+
+            FadeAnimator.SetTrigger("Fade In");
+            LoadingIcon.SetActive(false);
+            yield return new WaitForSeconds(0.1f);
+            for (int i = 0; i < OtherUI.Length; i++)
+            {
+                OtherUI[i].enabled = true;
+            }
+            yield return new WaitForSeconds(4);
+            LoadingIcon.GetComponentInParent<Image>().enabled = false;
         }
     }
 

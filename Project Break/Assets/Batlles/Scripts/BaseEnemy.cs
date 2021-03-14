@@ -10,6 +10,7 @@ public class BaseEnemy
         Fire,
         Electric,
         Wind,
+        Steel,
         Blessed,
         Cursed,
     }

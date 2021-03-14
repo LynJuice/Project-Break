@@ -17,6 +17,15 @@ public class BattleInterface : MonoBehaviour
     [SerializeField] Image PowerPanel;
     public Button[] Buttons = new Button[6];
 
+    [Header("Round Switch")]
+    [SerializeField] Camera Cam;
+    [SerializeField] Transform OriginPos;
+    [SerializeField] Animator Doors;
+    bool Running;
+
+    [Header("Inventory")]
+    [SerializeField] GameObject InvPanel;
+
     void StartHIC()
     {
         BSM = FindObjectOfType<BattleStateMachine>();
@@ -125,6 +134,11 @@ public class BattleInterface : MonoBehaviour
         PowerPanel.gameObject.SetActive(true);
     }
 
+    public void OpenInventory()
+    {
+        InvPanel.SetActive(true);
+    }
+
 
     public void SelectSkill(int Z)
     {
@@ -154,33 +168,80 @@ public class BattleInterface : MonoBehaviour
 
         if (hero.Spirit.Powers[Z].ElimentToApply != Power.ApplyEliment.Other)
         {
-            HeroState.Selecting = true;
-
-            PowerPanel.gameObject.SetActive(false);
-
-            yield return new WaitUntil(() => !HeroState.Selecting);
-
-            for (int i = 0; i < BSM.EnemysInBattle.Count; i++)
+            if(!hero.Spirit.Powers[Z].Multi)
             {
-                BSM.EnemysInBattle[i].GetComponent<EnemyStateMachine>().EnemySelected.SetActive(false);
-            }
+                HeroState.Selecting = true;
 
-            BSM.EnemysInBattle[HeroState.SelectedEnemy].GetComponent<EnemyStateMachine>().Enemy.CurHp -= Random.Range(hero.Spirit.Powers[Z].BaseDam, hero.Spirit.Powers[Z].MaxDam);
-            hero.CurMp -= hero.Spirit.Powers[Z].ChargeCost;
-            Debug.Log(BSM.EnemysInBattle[HeroState.SelectedEnemy].GetComponent<EnemyStateMachine>().Enemy.CurHp);
+                PowerPanel.gameObject.SetActive(false);
+
+                yield return new WaitUntil(() => !HeroState.Selecting);
+
+                for (int i = 0; i < BSM.EnemysInBattle.Count; i++)
+                {
+                    BSM.EnemysInBattle[i].GetComponent<EnemyStateMachine>().EnemySelected.SetActive(false);
+                }
+
+                BSM.EnemysInBattle[HeroState.SelectedEnemy].GetComponent<EnemyStateMachine>().ReciveDamage(Random.Range(hero.Spirit.Powers[Z].BaseDam, hero.Spirit.Powers[Z].MaxDam), hero, hero.Spirit.Powers[Z]);
+                hero.CurMp -= hero.Spirit.Powers[Z].ChargeCost;
+            }
+            else
+            {
+                PowerPanel.gameObject.SetActive(false);
+
+                for (int i = 0; i < BSM.EnemysInBattle.Count; i++)
+                {
+                    BSM.EnemysInBattle[i].GetComponent<EnemyStateMachine>().ReciveDamage(Random.Range(hero.Spirit.Powers[Z].BaseDam, hero.Spirit.Powers[Z].MaxDam), hero, hero.Spirit.Powers[Z]);
+                    yield return new WaitForSeconds(.5f);
+                }
+
+                hero.CurMp -= hero.Spirit.Powers[Z].ChargeCost;
+            }
         }
         else if(hero.Spirit.Powers[Z].ElimentToApply != Power.ApplyEliment.None)
         { // heal
-            hero.CurHp += Random.Range(hero.Spirit.Powers[Z].BaseHeal, hero.Spirit.Powers[Z].MaxHeal);
+            if(!hero.Spirit.Powers[Z].Multi)
+            {
+                hero.CurHp += Random.Range(hero.Spirit.Powers[Z].BaseHeal, hero.Spirit.Powers[Z].MaxHeal);
 
-            if (hero.CurHp > hero.BaseHp)
-                hero.CurHp = hero.BaseHp;
+                if (hero.CurHp > hero.BaseHp)
+                    hero.CurHp = hero.BaseHp;
 
-            PowerPanel.gameObject.SetActive(false);
-            hero.CurMp -= hero.Spirit.Powers[Z].ChargeCost;
+                PowerPanel.gameObject.SetActive(false);
+                hero.CurMp -= hero.Spirit.Powers[Z].ChargeCost;
+            }
         }
 
         BSM.Turns++;
         HeroState.Done = true;
+    }
+
+    public IEnumerator UpdateCamera(bool OldSpot = false)
+    {
+        if (Running)
+            yield return null;
+        Running = true;
+        HeroStateMachine hero = null;
+        for (int i = 0; i < BSM.HerosInBattle.Count; i++)
+        {
+            if (BSM.HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn)
+                hero = BSM.HerosInBattle[i].GetComponent<HeroStateMachine>();
+        }
+        if (hero != null && Cam.transform.parent != hero.hero.CameraPos && !OldSpot)
+        {
+            Doors.SetTrigger("Open");
+            yield return new WaitForSeconds(.2f);
+            Cam.transform.parent = hero.hero.CameraPos;
+            Cam.transform.localPosition = Vector3.zero;
+            Cam.transform.localRotation = Quaternion.Euler(0,0,0);
+        }
+
+        if(OldSpot)
+        {
+            Doors.SetTrigger("Open");
+            yield return new WaitForSeconds(.2f);
+            OriginPos.transform.parent = OriginPos;
+            OriginPos.transform.localPosition = Vector3.zero;
+            OriginPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
     }
 }

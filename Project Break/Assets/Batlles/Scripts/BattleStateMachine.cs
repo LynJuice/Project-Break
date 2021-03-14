@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,8 +10,7 @@ public class BattleStateMachine : MonoBehaviour
     [SerializeField] GameObject Temp;
     public int CurrentRound = 1;
     [HideInInspector] public int Turns;
-    public bool PlayerCanChooseTimer;
-    public bool PlayerWaited;
+    int Turn;
     public enum PerformAction
     {
         Wait,
@@ -36,10 +36,6 @@ public class BattleStateMachine : MonoBehaviour
         Done
     }
 
-    public HeroGUI HeroInput;
-
-    public List<GameObject> HerosToManage = new List<GameObject>();
-
     void Awake()
     {
         BattleStates = PerformAction.Wait;
@@ -49,22 +45,25 @@ public class BattleStateMachine : MonoBehaviour
         BI = FindObjectOfType<BattleInterface>();
     }
 
+    void Start()
+    {
+        StartCoroutine(HandlePlayersTurn());
+    }
+
     IEnumerator HandlePlayersTurn()
     {
-        PlayerWaited = true;
         for (int i = 0; i < HerosInBattle.Count; i++)
         {
-            if (!HerosInBattle[i].GetComponent<HeroStateMachine>().Done)
+            if (!HerosInBattle[i].GetComponent<HeroStateMachine>().Done && !HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn)
             {
                 HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn = true;
-                Debug.Log(HerosInBattle[i].GetComponent<HeroStateMachine>().hero.Name + "'s turn");
+                StartCoroutine(BI.UpdateCamera());
                 yield return new WaitUntil(() => HerosInBattle[i].GetComponent<HeroStateMachine>().Done);
                 HerosInBattle[i].GetComponent<HeroStateMachine>().MyTurn = false;
-                PlayerCanChooseTimer = false;
-                Debug.Log(HerosInBattle[i].GetComponent<HeroStateMachine>().hero.Name + "'s turn is done");
             }
         }
-    }
+    } 
+
     void CheckForDupes()
     {
         int Performinces = EnemysInBattle.Count + HerosInBattle.Count;
@@ -85,6 +84,12 @@ public class BattleStateMachine : MonoBehaviour
     }
     void Battlestating()
     {
+        if(Turn < Turns)
+        {
+            Turn = Turns;
+            StartCoroutine(HandlePlayersTurn());
+        }
+
         NumberOfPerformers = (HerosInBattle.Count + EnemysInBattle.Count);
         int NumberOfPerformersminus = NumberOfPerformers - Turns;
         if (Turns == NumberOfPerformers)
@@ -96,9 +101,6 @@ public class BattleStateMachine : MonoBehaviour
         switch (BattleStates)
         {
             case (PerformAction.Wait):
-
-                //     if(!PlayerWaited)
-                StartCoroutine(HandlePlayersTurn());
                 int e = 0;
                 for (int i = 0; i < HerosInBattle.Count; i++)
                 {
@@ -111,7 +113,6 @@ public class BattleStateMachine : MonoBehaviour
 
                 break;
             case (PerformAction.TakeAction):
-                PlayerWaited = false;
                 GameObject Performer = PerformersList[0].AttackerGameObject;
                 if (PerformersList[0].Type == "Enemy")
                 {
@@ -125,7 +126,6 @@ public class BattleStateMachine : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("No attackobject");
                         PerformersList.RemoveAt(0);
                     }
                 }
@@ -138,7 +138,6 @@ public class BattleStateMachine : MonoBehaviour
 
     void Update()
     {
-        CheckForDupes();
         Battlestating();
         CheckWinLose();
     }
@@ -151,8 +150,8 @@ public class BattleStateMachine : MonoBehaviour
                 return;
         }
 
-
         PerformersList.Add(input);
+        CheckForDupes();
     }
 
     void StartNewTurn()
@@ -169,13 +168,19 @@ public class BattleStateMachine : MonoBehaviour
         }
         CurrentRound++;
         BattleStates = PerformAction.Wait;
+        Turn = 0;
+        Turns = 0;
+        StartCoroutine(HandlePlayersTurn());
         Debug.Log("New Round Started");
     }
 
     void CheckWinLose()
     {
         if (HerosInBattle.Count == 0)
+        {
             Debug.Log("Lost");
+            StartCoroutine( SH.ChangeScene(0));
+        }
 
         if (EnemysInBattle.Count == 0)
             Debug.Log("Won");

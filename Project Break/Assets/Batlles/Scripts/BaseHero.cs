@@ -33,6 +33,9 @@ public class BaseHero
     public int intellect;
     public int agility;
     public int dexterity;
+
+    [Header("Other")]
+    public Transform CameraPos;
 }
 
 [System.Serializable]

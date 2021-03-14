@@ -50,7 +50,7 @@ public class EnemyStateMachine : MonoBehaviour
                     ChooseAction();
                     CurrentState = TurnState.Waiting;
                 }
-               break;
+                break;
 
             case (TurnState.Waiting):
                 // Idle
@@ -125,7 +125,7 @@ public class EnemyStateMachine : MonoBehaviour
 
         ActionStarted = true;
 
-        Vector3 HeroPos = new Vector3(HeroToAttack.transform.position.x,HeroToAttack.position.y, HeroToAttack.position.z + 1.5f);
+        Vector3 HeroPos = new Vector3(HeroToAttack.transform.position.x, HeroToAttack.position.y, HeroToAttack.position.z + 1.5f);
         while (MoveTowardsEnemy(HeroPos)) { yield return null; }
 
         if (HeroToAttack.GetComponent<HeroStateMachine>().hero.CurDef < Random.Range(0, 100))
@@ -159,5 +159,66 @@ public class EnemyStateMachine : MonoBehaviour
             return true;
         else
             return false;
+    }
+
+    public void ReciveDamage(int Damage, BaseHero hero, Power Eliment = null)
+    {
+        int TotalDamage = 0;
+
+        if (Eliment != null)
+        {
+            switch (Enemy.EnemyType)
+            {
+                case BaseEnemy.Type.Wind:
+                    if (Eliment.ElimentToApply == Power.ApplyEliment.Steel || Eliment.ElimentToApply == Power.ApplyEliment.Cursed || Eliment.ElimentToApply == Power.ApplyEliment.Ice)
+                        TotalDamage = Damage + Random.Range(0, Damage);
+                    else
+                        TotalDamage = Damage;
+                    break;
+                case BaseEnemy.Type.Fire:
+                    if (Eliment.ElimentToApply == Power.ApplyEliment.Wind || Eliment.ElimentToApply == Power.ApplyEliment.Blessed || Eliment.ElimentToApply == Power.ApplyEliment.Ice)
+                        TotalDamage = Damage + Random.Range(0, Damage);
+                    else
+                        TotalDamage = Damage;
+                    break;
+                case BaseEnemy.Type.Electric:
+                    if (Eliment.ElimentToApply == Power.ApplyEliment.Blessed)
+                        TotalDamage = Damage + Random.Range(0, Damage);
+                    else
+                        TotalDamage = Damage;
+                    break;
+                case BaseEnemy.Type.Ice:
+                    if (Eliment.ElimentToApply == Power.ApplyEliment.Steel || Eliment.ElimentToApply == Power.ApplyEliment.Cursed)
+                        TotalDamage = Damage + Random.Range(0, Damage);
+                    else
+                        TotalDamage = Damage;
+                    break;
+                case BaseEnemy.Type.Steel:
+                    if (Eliment.ElimentToApply == Power.ApplyEliment.Fire || Eliment.ElimentToApply == Power.ApplyEliment.Cursed || Eliment.ElimentToApply == Power.ApplyEliment.Blessed || Eliment.ElimentToApply == Power.ApplyEliment.Electric)
+                        TotalDamage = Damage + Random.Range(0, Damage);
+                    else
+                        TotalDamage = Damage;
+                    break;
+            }
+        }
+        else
+        {
+            if (hero.Stamina > Random.Range(0, 100))
+                TotalDamage = Damage + Random.Range(0, Damage);
+            else
+                TotalDamage = Damage;
+        }
+
+        if(Enemy.curDef > Random.Range(0,100))
+        {
+            Debug.Log(Enemy.Name + " Blocked");
+            Anim.SetTrigger("Block");
+        }
+        else
+        {
+            Enemy.CurHp -= TotalDamage;
+            Anim.SetTrigger("Hit");
+            Debug.Log("Player attacked: " + Enemy.Name + " And Delt: " + TotalDamage + " Current health after attack: " + Enemy.CurHp);
+        }
     }
 }

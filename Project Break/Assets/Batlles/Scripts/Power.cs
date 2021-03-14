@@ -8,6 +8,7 @@ public class Power : ScriptableObject
         Fire,
         Electric,
         Wind,
+        Steel,
         Blessed,
         Cursed,
         Other,
@@ -16,6 +17,8 @@ public class Power : ScriptableObject
     public ApplyEliment ElimentToApply;
 
     public string Name;
+
+    public bool Multi;
     
     public int ChargeCost;
     public int HealthCost;
