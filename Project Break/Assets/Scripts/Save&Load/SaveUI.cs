@@ -15,7 +15,7 @@ public class SaveUI : MonoBehaviour
 
     public void SaveButton(int Slot)
     {
-        SaveSystem.SaveData(Slot,FindObjectOfType<PlayerMovement>(),FindObjectOfType<Inventory>());
+        SaveSystem.SaveData(Slot,FindObjectOfType<PlayerMovement>());
     }
 
     public void LoadButton(int Slot)
@@ -24,10 +24,10 @@ public class SaveUI : MonoBehaviour
         SavedData data = SaveSystem.LoadData(Slot);
 
         SceneHandler sceneHandler = FindObjectOfType<SceneHandler>();
-        PlayerPrefs.SetFloat("FromSave",1);
+
+        PlayerPrefs.SetInt("FromSave",1);
+
         FindObjectOfType<SceneDataTransfer>().data = data;
-
-
         
         StartCoroutine(sceneHandler.ChangeScene(data.Scene));
     }

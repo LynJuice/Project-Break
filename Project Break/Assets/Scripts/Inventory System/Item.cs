@@ -5,6 +5,7 @@ public class Item : ScriptableObject
 {
     public string Name;
     public string Discription;
+    public int ID;
 
     public bool StoryItem;
 

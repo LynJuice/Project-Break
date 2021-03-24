@@ -913,7 +913,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1699808734
 Transform:
   m_ObjectHideFlags: 0
@@ -951,7 +951,7 @@ PrefabInstance:
     - target: {fileID: 5326582432789428077, guid: e2fb021aee8fc274bacb765d43a6fd7b,
         type: 3}
       propertyPath: SceneIndex
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6356481940099838349, guid: e2fb021aee8fc274bacb765d43a6fd7b,
         type: 3}
@@ -1676,17 +1676,17 @@ PrefabInstance:
     - target: {fileID: 6778936295055016684, guid: 11c19eb3ad056014f9d9033184c215b5,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.1691144
+      value: 0.16911438
       objectReference: {fileID: 0}
     - target: {fileID: 6778936295055016684, guid: 11c19eb3ad056014f9d9033184c215b5,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.33186832
+      value: -0.3318683
       objectReference: {fileID: 0}
     - target: {fileID: 6778936295055016684, guid: 11c19eb3ad056014f9d9033184c215b5,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.060604684
+      value: 0.06060468
       objectReference: {fileID: 0}
     - target: {fileID: 6778936295157062747, guid: 11c19eb3ad056014f9d9033184c215b5,
         type: 3}

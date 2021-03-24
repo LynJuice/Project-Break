@@ -6,14 +6,14 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveSystem
 {
-    public static void SaveData(int Slot,PlayerMovement PM,Inventory INV)
+    public static void SaveData(int Slot,PlayerMovement PM)
     {
         BinaryFormatter formatter = new BinaryFormatter();
 
         string path = Application.persistentDataPath + "/Data" + Slot + ".Soul";
         FileStream stream = new FileStream(path, FileMode.Create);
 
-        SavedData data = new SavedData(PM,INV);
+        SavedData data = new SavedData(PM);
 
         formatter.Serialize(stream,data);
         stream.Close();

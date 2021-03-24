@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Dates")]
+    public int Day;
+    public int Month;
+
+    [Header("Battles")]
+    bool InCooldown;
+
     [Header("Interactables")]
     public bool CanMove = true;
     [SerializeField] GameObject Camera;
@@ -26,6 +33,11 @@ public class PlayerMovement : MonoBehaviour
     [Header("Health")]
     public int Health;
 
+    public IEnumerator StartCoolDown(float time)
+    {
+        yield return new WaitForSeconds(time);
+        InCooldown = false;
+    }
     void Start()
     {
         Controller = GetComponent<CharacterController>();
@@ -57,6 +69,9 @@ public class PlayerMovement : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0, angle, 0);
                 Vector3 MoveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
                 Controller.Move(MoveDir.normalized * CurrentMovementSpeed * Time.deltaTime);
+
+                if (Random.Range(0, 100000) < 50 && !InCooldown)
+                    startBattle();
             }
             else
                 Anim.SetBool("Walk", false);
@@ -78,9 +93,8 @@ public class PlayerMovement : MonoBehaviour
             CurrentMovementSpeed = WalkingSpeed;
         }
     }                          // Allows Player To run
-    public void startBattle(int advantage)
+    public void startBattle()
     {
-        PlayerPrefs.SetInt("Battle",advantage);
         StartCoroutine(scenemanager.ChangeScene(3));
     }
 }

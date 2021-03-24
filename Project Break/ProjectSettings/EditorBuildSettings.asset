@@ -15,8 +15,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Shadow Worlds/Tokyo/Tokyo Shibuya Shadow.unity
     guid: 5bd07122c5cae144ab54ed6f932963f2
   - enabled: 1
-    path: Assets/Scenes/Battle Scenes/Battle - Floor 0 - 25.unity
+    path: Assets/Scenes/WaterFall/1 - 25/Battle/Battle - Floor 1 - 25.unity
     guid: 8814668b9245be941aeb5b90422dd598
+  - enabled: 1
+    path: Assets/Scenes/WaterFall/1 - 25/Rooms/1 - 25 Rooms.unity
+    guid: 027de2b9bf89b4f4d92c60fff6f8ee2f
   - enabled: 1
     path: Assets/Scenes/Real World/Town/Town.unity
     guid: 26b6c2062335c6e45bbe8f03a650f127
